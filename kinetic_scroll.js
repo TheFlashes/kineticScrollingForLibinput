@@ -7,7 +7,7 @@ let kineticScroll = null;
 let scrollLoop = false;
 
 const drag = 3;
-const dragMultiplier = 1.02;
+const dragMultiplier = 1;
 let currentDrag = drag;
 
 window.onwheel = function (ev) {
@@ -27,6 +27,8 @@ window.onwheel = function (ev) {
             lastDeltaY[i].time = Date.now();
         }
     }
+
+    if ((lastDeltaY[lastDeltaY.length - 2] + lastDeltaY[lastDeltaY.length - 1]) / 2 < 50) return;
 
     kineticScroll = setTimeout(() => {
         let averageScroll = 0;
@@ -50,8 +52,6 @@ window.onwheel = function (ev) {
             window.scrollBy(0, averageScroll * direction);
             averageScroll -= currentDrag;
             currentDrag *= dragMultiplier;
-
-            console.log(averageScroll + " " + (averageScroll * -1));
 
             if (averageScroll < 0) {
                 clearInterval(scrollLoop);
